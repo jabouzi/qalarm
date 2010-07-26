@@ -6,12 +6,7 @@ QalarmDialog::QalarmDialog( QWidget * parent, Qt::WFlags f)
     path = QCoreApplication::applicationDirPath();
     if (path.data()[path.size() - 1] != '/') path += "/";
     setupUi(this);
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(path+"data/.alarm.db");
-    if (!tableExists())
-    {
-        createTable();
-    }
+    initDB();
     init();   
     connect(saveButton, SIGNAL(clicked()), this, SLOT(save()));
     connect(radioOnce, SIGNAL(clicked()), this, SLOT(enable()));
@@ -21,10 +16,20 @@ QalarmDialog::QalarmDialog( QWidget * parent, Qt::WFlags f)
     connect(selctAudioButton, SIGNAL(clicked()), this, SLOT(load()));
 }
 
+void QalarmDialog::initDB()
+{    
+    db = Database::getInstance();
+    db->setPath(path);
+    db->setDatabaseName(path+"data/.alarm.db");
+    db->setDatabase();      
+}
+
 void QalarmDialog::init()
 {
     audioEdit->setText(getAudio());
+    qDebug("%s",audioEdit->text().toLatin1().data());
     urlEdit->setText(getUrl());
+    qDebug("%s",urlEdit->text().toLatin1().data());
     timeEdit->setTime(QTime::fromString(getTime(), "HH:mm"));
     QStringList list;
     list << "Monday"<<"Tuesday"<<"Wednesday"<<"Thursday"<<"Friday"<<"Saturday"<<"Sunday";    
@@ -48,105 +53,86 @@ void QalarmDialog::init()
 
 int QalarmDialog::getDay()
 {
-    bool ok;
-    db.open();    
-    QSqlQuery query;
-    query.exec("SELECT day FROM alarmTable");
-    int field = query.record().indexOf("day");
-    query.next();
-    return query.value(field).toInt(&ok);
+    db->setTable("alarmTable");
+    return db->select("day").toInt();    
 }
+
 int QalarmDialog::getRepeat()
 {
-    bool ok;
-    db.open();    
-    QSqlQuery query;
-    query.exec("SELECT repeat FROM alarmTable");
-    int field = query.record().indexOf("repeat");
-    query.next();
-    return query.value(field).toInt(&ok);
+    db->setTable("alarmTable");
+    return db->select("repeat").toInt();   
 }
 
 QString QalarmDialog::getTime()
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("SELECT time FROM alarmTable");
-    int field = query.record().indexOf("time");
-    query.next();
-    return query.value(field).toString();
+    db->setTable("alarmTable");
+    return db->select("time");   
 }
 
 QString QalarmDialog:: getAudio()
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("SELECT audio FROM alarmTable");
-    int field = query.record().indexOf("audio");
-    query.next();
-    return query.value(field).toString();
+    db->setTable("alarmTable");
+    return db->select("audio");   
 }
 
 QString QalarmDialog::getUrl()
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("SELECT url FROM alarmTable");
-    int field = query.record().indexOf("url");
-    query.next();
-    return query.value(field).toString();
+    db->setTable("alarmTable");
+    return db->select("url");   
 }
 
 QString QalarmDialog::getDate()
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("SELECT date FROM alarmTable");
-    int field = query.record().indexOf("date");
-    query.next();
-    return query.value(field).toString();
+    db->setTable("alarmTable");
+    return db->select("date");   
 }
 
 void QalarmDialog::setDay(int day)
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("UPDATE alarmTable SET day = '"+QString::number(day)+"'");
+    db->where("id = '1'");
+    db->setTable("alarmTable");
+    db->update("day", QString::number(day));
+    db->where("");
 }
 
 void QalarmDialog::setRepeat(int repeat)
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("UPDATE alarmTable SET repeat = '"+QString::number(repeat)+"'");
+    db->where("id = '1'");
+    db->setTable("alarmTable");
+    db->update("repeat", QString::number(repeat));
+    db->where("");
 }
 
 void QalarmDialog::setTime(QString time)
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("UPDATE alarmTable SET time = '"+time+"'");
+    db->where("id = '1'");
+    db->setTable("alarmTable");
+    db->update("time", time);
+    db->where("");
 }
 
 void QalarmDialog::setAudio(QString audio)
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("UPDATE alarmTable SET audio = '"+audio+"'");
+    db->where("id = '1'");
+    db->setTable("alarmTable");
+    db->update("audio", audio);
+    db->where("");
 }
 
 void QalarmDialog::setUrl(QString url)
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("UPDATE alarmTable SET url = '"+url+"'");
+    db->where("id = '1'");
+    db->setTable("alarmTable");
+    db->update("url", url);
+    db->where("");
 }
 
 void QalarmDialog::setDate(QString date)
 {
-    db.open();    
-    QSqlQuery query;
-    query.exec("UPDATE alarmTable SET date = '"+date+"'");
+    db->where("id = '1'");
+    db->setTable("alarmTable");
+    db->update("date", date);
+    db->where("");
 }
 
 void QalarmDialog::save()
@@ -188,19 +174,5 @@ void QalarmDialog::enable()
 void QalarmDialog::load()
 {
     audioEdit->setText(QFileDialog::getOpenFileName(this,tr("Open File"),".",tr("audios (*.mp3 *.wma *.ogg *.wave *.midi)")));
-}
-
-bool QalarmDialog::tableExists()
-{
-    QStringList tables = db.tables(QSql::Tables);
-    return tables.indexOf("alarmTable") >= 0;
-}
-
-void QalarmDialog::createTable()
-{
-    db.open();    
-    QSqlQuery query;
-    query.exec("CREATE TABLE alarmTable (id integer, date string, time string, day integer, repeat integer, audio string, url string)");
-    query.exec("INSERT INTO alarmTable VALUES ('','1/1/2010','8:00',1,0,'','')");
 }
 //

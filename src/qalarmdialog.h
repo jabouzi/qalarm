@@ -5,6 +5,7 @@
 #include <QtSql>
 #include <QFileDialog>
 #include "ui_qalarm.h"
+#include "database.h"
 //
 class QalarmDialog : public QDialog, public Ui::Qalarm
 {
@@ -19,18 +20,16 @@ public:
     QString getDate();
     
 private:
-    void init();   
+    void initDB(); 
+    void init();  
     void setDay(int);
     void setRepeat(int);
     void setTime(QString);
     void setAudio(QString);
     void setUrl(QString);
     void setDate(QString);
-    bool tableExists();
-    void createTable();
-    QSqlDatabase db;
-    QSqlQuery query;
     QString path;
+    Database *db;
     
 private slots:
     void save();

@@ -67,6 +67,12 @@
      <bold>false</bold>
     </font>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="displayFormat">
+    <string>hh:mm</string>
+   </property>
   </widget>
   <widget class="QFrame" name="frame">
    <property name="geometry">

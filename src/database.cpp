@@ -4,8 +4,7 @@ bool Database::instanceFlag = false;
 Database* Database::single = NULL;
 
 Database::Database() 
-{
-    pLog = new Log("/home/skander/Development/Task/errors.log");
+{    
     db = QSqlDatabase::addDatabase("QSQLITE");    
 }
 
@@ -114,7 +113,7 @@ void Database::update(QString field, QString value)
 {
     prepareDB();
     QSqlQuery query;    
-    QString sql = "UPDATE "+table+" SET "+field+" = '"+value;
+    QString sql = "UPDATE "+table+" SET "+field+" = '"+value+"'";
     if (sqlWhere != "") sql += " WHERE "+sqlWhere;
     pLog->Write(sql);
     query.exec(sql);
@@ -159,14 +158,19 @@ void Database::sqlQuery(QString sql)
 bool Database::tablesExists()
 {
     QStringList tables = db.tables(QSql::Tables);
-    return (tables.indexOf("tasksTable") >= 0 and tables.indexOf("prefTable") >= 0);
+    return (tables.indexOf("alarmTable") >= 0);
 }
 
 void Database::createTables()
 {
     pLog->Write("##CREATE##");
     QSqlQuery query;
-    query.exec("CREATE TABLE tasksTable (id integer PRIMARY KEY, title string, start string, end string, detail text, taskDate date)");
-    query.exec("CREATE TABLE prefTable (id integer, timer integer,  history integer)");
-    query.exec("INSERT INTO prefTable VALUES (1,60,30)");
+    query.exec("CREATE TABLE alarmTable (id integer, date string, time string, day integer, repeat integer, audio string, url string)");
+    query.exec("INSERT INTO alarmTable VALUES ('1','1/1/2010','8:00',1,0,'','http://www.google.com')");
+}
+
+void Database::setPath(QString lpath)
+{
+    path = lpath;
+    pLog = new Log(path+"errors.log");
 }
