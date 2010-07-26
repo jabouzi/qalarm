@@ -1,0 +1,10 @@
+TEMPLATE = app
+QT = gui core phonon sql
+CONFIG += qt warn_on console release
+DESTDIR = bin
+OBJECTS_DIR = build
+MOC_DIR = build
+UI_DIR = build
+FORMS = ui/qalarm.ui
+SOURCES = src/main.cpp src/qalarmdialog.cpp src/alarm.cpp src/qalarm.cpp src/database.cpp src/log.cpp
+HEADERS += src/qalarmdialog.h src/alarm.h src/qalarm.h src/database.h src/log.h
