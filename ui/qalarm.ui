@@ -366,6 +366,20 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>calendarWidget</tabstop>
+  <tabstop>timeEdit</tabstop>
+  <tabstop>daysList</tabstop>
+  <tabstop>radioOnce</tabstop>
+  <tabstop>radioOnceWeek</tabstop>
+  <tabstop>radioWeekdays</tabstop>
+  <tabstop>radioAlldays</tabstop>
+  <tabstop>audioEdit</tabstop>
+  <tabstop>selctAudioButton</tabstop>
+  <tabstop>urlEdit</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>saveButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
