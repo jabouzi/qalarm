@@ -2,6 +2,7 @@
 #define ALARM_H
 
 #include <QObject>
+#include <QtGui>
 #include <QTimer> 
 #include <QDateTime>
 #include <QCoreApplication>

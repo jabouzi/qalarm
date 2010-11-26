@@ -27,9 +27,7 @@ void QalarmDialog::initDB()
 void QalarmDialog::init()
 {
     audioEdit->setText(getAudio());
-    qDebug("%s",audioEdit->text().toLatin1().data());
     urlEdit->setText(getUrl());
-    qDebug("%s",urlEdit->text().toLatin1().data());
     timeEdit->setTime(QTime::fromString(getTime(), "HH:mm"));
     QStringList list;
     list << "Monday"<<"Tuesday"<<"Wednesday"<<"Thursday"<<"Friday"<<"Saturday"<<"Sunday";    

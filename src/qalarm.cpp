@@ -161,7 +161,7 @@ void Qalarm::repeatAlarm()
     int year = today.date().year();
     int month = today.date().month();
     int day = today.date().day();
-    
+        
     alarm.setYear(year);
     alarm.setMonth(month);
     if (1 == repeat)
@@ -175,16 +175,13 @@ void Qalarm::repeatAlarm()
     else if (2 == repeat)
     {
         int weekDay = today.date().dayOfWeek();
-        int alarmDay = alarmDialog.getDay()+1;
-        int diffDays = alarmDay - weekDay; 
-        if (diffDays <= 0) diffDays = 7 + diffDays;
-        if (diffDays > 5) diffDays = diffDays + (8 - diffDays); 
-        alarm.setDay(day+diffDays);       
+        if (weekDay == 5) alarm.setDay(day+3);   
+        else alarm.setDay(day+1);       
     }
     else if (3 == repeat)
     {
         alarm.setDay(day+1);       
-    }   
+    }       
     setAlarmTime();
 }
 
