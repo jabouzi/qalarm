@@ -142,7 +142,7 @@ void Qalarm::startAlarm()
         alarm.setDay(date.day());
     }   
     setAlarmTime();
-    if (alarm.getTimeLeft() < 0)
+    if (alarm.getTimeLeft() > 0)
     {
         repeatAlarm();
     }
